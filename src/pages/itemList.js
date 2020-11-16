@@ -27,7 +27,7 @@ class ItemList extends React.Component {
             this.props.history.push(
                 {
                     pathname: '/detail',
-                    query: {
+                    state: {
                         tab: this.state.tab,
                         item: this.state.item
                     }

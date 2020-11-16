@@ -5,9 +5,26 @@ import MusicDetail from './musicDetail';
 
 class Detail extends React.Component {
 
-    state = {
-        tab: this.props.location.query.tab,
-        item: this.props.location.query.item
+    constructor(props) {
+        super(props);
+        const location = this.props.location;
+        var tab = '';
+        var item = {};
+        if (location.state) {//判断当前有参数
+            tab = location.state.tab;
+            item = location.state.item;
+            sessionStorage.setItem('tab', JSON.stringify(tab));
+            sessionStorage.setItem('item', JSON.stringify(item));// 存入到sessionStorage中
+            console.dir(sessionStorage);
+        } else {
+            tab = JSON.parse(sessionStorage.getItem('tab'));// 当没有参数时，取sessionStorage中的参数
+            item = JSON.parse(sessionStorage.getItem('item'));
+            console.dir(item);
+        }
+        this.state = {
+            tab,
+            item
+        }
     }
 
     renderDetail = (tab, item) => {
@@ -35,8 +52,10 @@ class Detail extends React.Component {
         );
     }
     render() {
-        const tab = this.state.tab;
-        const item = this.state.item;
+        const tab = JSON.parse(sessionStorage.getItem('tab'));
+        const item = JSON.parse(sessionStorage.getItem('item'));
+        console.dir(tab);
+        console.dir(item);
         let category = '';
         switch (tab) {
             case 'book':
@@ -60,6 +79,11 @@ class Detail extends React.Component {
             </div>
             <div className="detail-content">{this.renderDetail(tab, item)}</div>
         </div >
+    }
+
+    componentWillUnmount() {
+        sessionStorage.removeItem('tab');
+        sessionStorage.removeItem('item');
     }
 }
 
